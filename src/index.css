@@ -1,0 +1,234 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+:root {
+  --blue: #2563EB;
+  --blue-dark: #1D4ED8;
+  --blue-deep: #1E3A8A;
+  --blue-light: #DBEAFE;
+  --blue-glow: rgba(37, 99, 235, 0.18);
+  --orange: #F97316;
+  --orange-dark: #EA580C;
+  --slate-900: #0F172A;
+  --slate-700: #334155;
+  --slate-500: #64748B;
+  --slate-200: #E2E8F0;
+  --slate-100: #F1F5F9;
+  --white: #FFFFFF;
+  --font-head: 'Poppins', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--white);
+  color: var(--slate-900);
+  overflow-x: hidden;
+}
+
+/* ── ANIMATIONS ─────────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-2deg);
+  }
+
+  50% {
+    transform: translateY(-14px) rotate(2deg);
+  }
+}
+
+@keyframes floatB {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(3deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(-1deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0) rotate(-12deg);
+  }
+
+  70% {
+    transform: scale(1.15) rotate(3deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.7s cubic-bezier(.22, .68, 0, 1.2) both;
+}
+
+.fade-up-2 {
+  animation: fadeUp 0.7s 0.15s cubic-bezier(.22, .68, 0, 1.2) both;
+}
+
+.fade-up-3 {
+  animation: fadeUp 0.7s 0.3s cubic-bezier(.22, .68, 0, 1.2) both;
+}
+
+.fade-up-4 {
+  animation: fadeUp 0.7s 0.45s cubic-bezier(.22, .68, 0, 1.2) both;
+}
+
+.fade-up-5 {
+  animation: fadeUp 0.7s 0.6s cubic-bezier(.22, .68, 0, 1.2) both;
+}
+
+.fade-in {
+  animation: fadeIn 1s 0.2s both;
+}
+
+/* ── CUSTOM UI CLASSES ──────────────────────────────────── */
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--orange);
+  border-radius: 2px;
+  opacity: 0.4;
+}
+
+.ticker-track {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 28s linear infinite;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.hero-eyebrow-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--orange);
+  opacity: 0.4;
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+.floating-card {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s;
+}
+
+.card-main {
+  animation: float 6s ease-in-out infinite;
+}
+
+.card-left {
+  animation: floatB 7s 1s ease-in-out infinite;
+}
+
+.card-right {
+  animation: float 8s 0.5s ease-in-out infinite;
+}
+
+.prod-card {
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.06);
+  transition: all 0.3s;
+}
+
+.prod-card:hover {
+  box-shadow: 0 20px 48px rgba(37, 99, 235, 0.14);
+}
+
+.banner-card::before {
+  content: '';
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.banner-card::after {
+  content: '';
+  position: absolute;
+  right: 40px;
+  top: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.hiw-grid::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
