@@ -28,6 +28,7 @@ const AppContent = () => {
       <Route path="/" element={<HomePage onNavigate={handleNavWithLoading} />} />
       <Route path="/register" element={<RegisterPage onNavigate={handleNavWithLoading} />} />
       <Route path="/login" element={<LoginPage onNavigate={handleNavWithLoading} />} />
+      <Route path="/cart" element={React.createElement(require('./pages/Cart.jsx').default)} />
     </Routes>
   );
 };

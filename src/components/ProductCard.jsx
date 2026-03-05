@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useCart } from '../context/CartContext';
 import { Heart } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
     const [isWishlisted, setIsWishlisted] = useState(false);
     const [isAdded, setIsAdded] = useState(false);
+    const { addToCart } = useCart();
 
     const handleAddToCart = () => {
+        addToCart(product, 1);
         setIsAdded(true);
         setTimeout(() => setIsAdded(false), 1200);
     };
