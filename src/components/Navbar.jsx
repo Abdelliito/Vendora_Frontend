@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { ShoppingCart, LogIn, UserPlus, LogOut, User as UserIcon, ChevronDown } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ShoppingCart, LogIn, UserPlus, LogOut, User as UserIcon, ChevronDown, ShoppingBag } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 const Navbar = ({ onNavigate }) => {
     const { user, logout } = useAuth();
+    const { cart } = useCart();
+    const navigate = useNavigate();
     const [showUserMenu, setShowUserMenu] = useState(false);
 
     return (
@@ -29,19 +32,24 @@ const Navbar = ({ onNavigate }) => {
             </Link>
 
             <ul className="hidden md:flex items-center gap-[28px] list-none">
-                <li><a href="#categories" className="text-white/85 no-underline text-sm font-medium transition-colors hover:text-white">Categories</a></li>
-                <li><a href="#products" className="text-white/85 no-underline text-sm font-medium transition-colors hover:text-white">Products</a></li>
-                <li><a href="#vendors" className="text-white/85 no-underline text-sm font-medium transition-colors hover:text-white">Vendors</a></li>
-                <li><a href="#how" className="text-white/85 no-underline text-sm font-medium transition-colors hover:text-white">How It Works</a></li>
+                <li><Link to="/products" className="text-white/85 no-underline text-sm font-medium transition-colors hover:text-white">All Products</Link></li>
+                <li><a href="/#categories" className="text-white/85 no-underline text-sm font-medium transition-colors hover:text-white">Categories</a></li>
+                <li><a href="/#vendors" className="text-white/85 no-underline text-sm font-medium transition-colors hover:text-white">Vendors</a></li>
+                <li><a href="/#how" className="text-white/85 no-underline text-sm font-medium transition-colors hover:text-white">How It Works</a></li>
             </ul>
 
             <div className="flex items-center gap-[12px]">
-                <div className="relative text-white cursor-pointer p-[6px]">
+                <button
+                    onClick={() => navigate('/cart')}
+                    className="relative text-white cursor-pointer p-[6px] hover:bg-white/10 rounded-lg transition-all"
+                >
                     <ShoppingCart size={20} />
-                    <span className="absolute top-0 right-0 bg-accent text-white text-[9px] font-bold w-[16px] h-[16px] rounded-full flex items-center justify-center animate-[badgePop_0.4s_1s_cubic-bezier(.22,.68,0,1.2)_both]">
-                        3
-                    </span>
-                </div>
+                    {cart.length > 0 && (
+                        <span className="absolute top-0 right-0 bg-accent text-white text-[9px] font-bold w-[16px] h-[16px] rounded-full flex items-center justify-center animate-[badgePop_0.4s_1s_cubic-bezier(.22,.68,0,1.2)_both]">
+                            {cart.length}
+                        </span>
+                    )}
+                </button>
 
                 {user ? (
                     <div className="relative">
@@ -66,10 +74,15 @@ const Navbar = ({ onNavigate }) => {
                                     <UserIcon size={16} className="text-primary" />
                                     My Profile
                                 </button>
-                                <button className="w-full text-left px-4 py-2 text-sm text-dark hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer">
-                                    <Zap size={16} className="text-accent" />
-                                    Dashboard
-                                </button>
+                                {user.role === 'Vendor' && (
+                                    <button
+                                        onClick={() => { navigate('/vendor/dashboard'); setShowUserMenu(false); }}
+                                        className="w-full text-left px-4 py-2 text-sm text-dark hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
+                                    >
+                                        <ShoppingBag size={16} className="text-accent" />
+                                        Vendor Dashboard
+                                    </button>
+                                )}
                                 <div className="h-[1px] bg-slate-100 my-1 mx-2"></div>
                                 <button
                                     onClick={logout}

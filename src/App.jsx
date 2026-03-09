@@ -3,13 +3,28 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-ro
 import HomePage from './pages/HomePage';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
+import Cart from './pages/Cart';
+import ProductDetailPage from './pages/ProductDetailPage';
+import ProductsListPage from './pages/ProductsListPage';
+import VendorDashboard from './pages/VendorDashboard';
+import CheckoutPage from './pages/CheckoutPage';
 import LoadingScreen from './components/LoadingScreen';
 import { AuthProvider } from './context/AuthContext';
+
+// Ensure each route opens from the top instead of preserving old scroll position.
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
+
+  return null;
+};
 
 // Wrapper to handle loading state on navigation
 const AppContent = () => {
   const [loading, setLoading] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate();
 
   // Handle simulated loading for specific routes
@@ -24,12 +39,19 @@ const AppContent = () => {
   if (loading) return <LoadingScreen />;
 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage onNavigate={handleNavWithLoading} />} />
-      <Route path="/register" element={<RegisterPage onNavigate={handleNavWithLoading} />} />
-      <Route path="/login" element={<LoginPage onNavigate={handleNavWithLoading} />} />
-      <Route path="/cart" element={React.createElement(require('./pages/Cart.jsx').default)} />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<HomePage onNavigate={handleNavWithLoading} />} />
+        <Route path="/register" element={<RegisterPage onNavigate={handleNavWithLoading} />} />
+        <Route path="/login" element={<LoginPage onNavigate={handleNavWithLoading} />} />
+        <Route path="/products" element={<ProductsListPage />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/vendor/dashboard" element={<VendorDashboard />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+      </Routes>
+    </>
   );
 };
 

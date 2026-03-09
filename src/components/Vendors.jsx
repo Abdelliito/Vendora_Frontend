@@ -1,37 +1,33 @@
-import React from 'react';
-
-const vendors = [
-    {
-        name: 'TechBazar PK',
-        category: 'Electronics & Gadgets',
-        avatar: '🧑‍💻',
-        products: 284,
-        rating: '4.9★'
-    },
-    {
-        name: 'Ayesha Crafts',
-        category: 'Jewellery & Handmade',
-        avatar: '👩‍🎨',
-        products: 156,
-        rating: '5.0★'
-    },
-    {
-        name: 'Lahore Threads',
-        category: 'Clothing & Fashion',
-        avatar: '👔',
-        products: 412,
-        rating: '4.8★'
-    },
-    {
-        name: 'NatureCare PK',
-        category: 'Health & Beauty',
-        avatar: '🌿',
-        products: 93,
-        rating: '4.9★'
-    }
-];
+import React, { useState, useEffect } from 'react';
+import { vendorService } from '../api/vendorService';
 
 const Vendors = () => {
+    const [vendors, setVendors] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchVendors = async () => {
+            try {
+                const data = await vendorService.getAllVendors();
+                setVendors(data.vendors || data);
+            } catch (error) {
+                console.error('Failed to fetch vendors:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchVendors();
+    }, []);
+
+    const getCategoryEmoji = (category) => {
+        const emojiMap = {
+            'Electronics & Gadgets': '🧑‍💻',
+            'Jewellery & Handmade': '👩‍🎨',
+            'Clothing & Fashion': '👔',
+            'Health & Beauty': '🌿',
+        };
+        return emojiMap[category] || '🏪';
+    };
     return (
         <section className="px-[5%] py-20 bg-light" id="vendors">
             <div className="max-w-[1200px] mx-auto">
@@ -48,26 +44,32 @@ const Vendors = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                    {vendors.map((vendor, idx) => (
-                        <div key={idx} className="bg-white rounded-[20px] p-[28px_24px] text-center border-2 border-slate-200 hover:border-primary hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(37,99,235,0.18)] transition-all cursor-pointer">
-                            <div className="w-[72px] h-[72px] rounded-full mx-auto mb-3.5 flex items-center justify-center text-[32px] border-[3px] border-primary-light relative">
-                                {vendor.avatar}
-                                <span className="absolute bottom-0 right-0 w-[22px] h-[22px] bg-primary rounded-full border-2 border-white flex items-center justify-center text-[10px] text-white">✓</span>
-                            </div>
-                            <h3 className="font-poppins text-[15px] font-bold text-dark mb-1">{vendor.name}</h3>
-                            <p className="text-xs text-mid mb-3.5">{vendor.category}</p>
-                            <div className="flex justify-center gap-5">
-                                <div className="text-center">
-                                    <div className="font-poppins text-base font-extrabold text-primary">{vendor.products}</div>
-                                    <div className="text-[11px] text-mid">Products</div>
+                    {loading ? (
+                        <div className="col-span-full text-center py-12 text-mid">Loading vendors...</div>
+                    ) : vendors.length === 0 ? (
+                        <div className="col-span-full text-center py-12 text-mid">No vendors available</div>
+                    ) : (
+                        vendors.map((vendor, idx) => (
+                            <div key={vendor._id || idx} className="bg-white rounded-[20px] p-[28px_24px] text-center border-2 border-slate-200 hover:border-primary hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(37,99,235,0.18)] transition-all cursor-pointer">
+                                <div className="w-[72px] h-[72px] rounded-full mx-auto mb-3.5 flex items-center justify-center text-[32px] border-[3px] border-primary-light relative">
+                                    {getCategoryEmoji(vendor.storeInfo?.category)}
+                                    <span className="absolute bottom-0 right-0 w-[22px] h-[22px] bg-primary rounded-full border-2 border-white flex items-center justify-center text-[10px] text-white">✓</span>
                                 </div>
-                                <div className="text-center">
-                                    <div className="font-poppins text-base font-extrabold text-primary">{vendor.rating}</div>
-                                    <div className="text-[11px] text-mid">Rating</div>
+                                <h3 className="font-poppins text-[15px] font-bold text-dark mb-1">{vendor.storeInfo?.name || vendor.name}</h3>
+                                <p className="text-xs text-mid mb-3.5">{vendor.storeInfo?.category || 'General'}</p>
+                                <div className="flex justify-center gap-5">
+                                    <div className="text-center">
+                                        <div className="font-poppins text-base font-extrabold text-primary">{vendor.productCount || 0}</div>
+                                        <div className="text-[11px] text-mid">Products</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="font-poppins text-base font-extrabold text-primary">{vendor.rating || '5.0'}★</div>
+                                        <div className="text-[11px] text-mid">Rating</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
         </section>
