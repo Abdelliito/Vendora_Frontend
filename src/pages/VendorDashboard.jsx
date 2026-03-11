@@ -5,6 +5,7 @@ import { productService } from '../api/productService';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Plus, Edit2, Trash2, Package } from 'lucide-react';
+import { getCategoryEmoji, getStockBadge, hasUsableProductImage } from '../utils/productVisuals';
 
 const VendorDashboard = () => {
     const { user } = useAuth();
@@ -255,44 +256,51 @@ const VendorDashboard = () => {
                             </div>
                         ) : (
                             <div className="space-y-4">
-                                {products.map((product) => (
-                                    <div
-                                        key={product._id}
-                                        className="flex items-center gap-6 p-4 border-2 border-slate-200 rounded-xl hover:border-primary transition-all"
-                                    >
-                                        <div className="w-20 h-20 bg-slate-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-                                            {product.images?.[0] ? (
-                                                <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <span className="text-2xl">🛍️</span>
-                                            )}
-                                        </div>
-                                        <div className="flex-1">
-                                            <h3 className="font-poppins font-bold text-dark mb-1">{product.name}</h3>
-                                            <div className="flex items-center gap-4 text-sm text-mid">
-                                                <span>Rs. {product.price?.toLocaleString()}</span>
-                                                <span>•</span>
-                                                <span>Stock: {product.stock}</span>
-                                                <span>•</span>
-                                                <span>{product.category}</span>
+                                {products.map((product) => {
+                                    const badge = getStockBadge(product.stock);
+
+                                    return (
+                                        <div
+                                            key={product._id}
+                                            className="flex items-center gap-6 p-4 border-2 border-slate-200 rounded-xl hover:border-primary transition-all"
+                                        >
+                                            <div className="w-20 h-20 bg-slate-100 rounded-lg flex items-center justify-center overflow-hidden shrink-0 relative">
+                                                {hasUsableProductImage(product.images?.[0]) ? (
+                                                    <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <span className="text-2xl">{getCategoryEmoji(product.category)}</span>
+                                                )}
+                                                <span className={`absolute top-1.5 left-1.5 font-poppins text-[8px] font-extrabold px-1.5 py-0.5 rounded-full tracking-[0.35px] uppercase ${badge.className}`}>
+                                                    {badge.label}
+                                                </span>
+                                            </div>
+                                            <div className="flex-1">
+                                                <h3 className="font-poppins font-bold text-dark mb-1">{product.name}</h3>
+                                                <div className="flex items-center gap-4 text-sm text-mid">
+                                                    <span>Rs. {product.price?.toLocaleString()}</span>
+                                                    <span>•</span>
+                                                    <span>Stock: {product.stock}</span>
+                                                    <span>•</span>
+                                                    <span>{product.category}</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => handleEdit(product)}
+                                                    className="p-3 bg-primary-light text-primary rounded-lg hover:bg-primary hover:text-white transition-all"
+                                                >
+                                                    <Edit2 size={18} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(product._id)}
+                                                    className="p-3 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => handleEdit(product)}
-                                                className="p-3 bg-primary-light text-primary rounded-lg hover:bg-primary hover:text-white transition-all"
-                                            >
-                                                <Edit2 size={18} />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(product._id)}
-                                                className="p-3 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all"
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

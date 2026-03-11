@@ -5,12 +5,13 @@ import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
+import { getCategoryEmoji, getStockBadge, hasUsableProductImage } from '../utils/productVisuals';
 
 const Cart = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { cart, removeFromCart, updateQty, clearCart } = useCart();
-  
+
   const total = cart.reduce((sum, item) => {
     const price = item.product?.price || 0;
     return sum + (price * item.qty);
@@ -60,17 +61,26 @@ const Cart = () => {
                 const product = item.product;
                 if (!product) return null;
 
+                const badge = getStockBadge(product.stock);
+
                 return (
                   <div key={item.productId} className="bg-white rounded-[20px] p-6 shadow-sm flex items-center gap-4">
-                    <div className="w-24 h-24 bg-slate-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-                      {product.images?.[0] ? (
+                    <div className="w-24 h-24 bg-slate-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 relative">
+                      {hasUsableProductImage(product.images?.[0]) ? (
                         <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-3xl">🛍️</span>
+                        <span className="text-3xl">{getCategoryEmoji(product.category)}</span>
                       )}
+                      <span className={`absolute top-1.5 left-1.5 font-poppins text-[9px] font-extrabold px-1.5 py-0.5 rounded-full tracking-[0.4px] uppercase ${badge.className}`}>
+                        {badge.label}
+                      </span>
                     </div>
                     
                     <div className="flex-1">
+                      <div className="text-[11px] text-mid font-medium mb-1 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        {product.vendorId?.storeInfo?.name || product.vendorId?.name || 'Unknown Vendor'}
+                      </div>
                       <h3 className="font-poppins font-bold text-dark mb-1">{product.name}</h3>
                       <div className="text-sm text-mid mb-3">
                         Rs. {product.price?.toLocaleString()} each

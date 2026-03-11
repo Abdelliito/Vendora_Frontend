@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { Heart } from 'lucide-react';
+import { getCategoryEmoji, getStockBadge, hasUsableProductImage } from '../utils/productVisuals';
 
 const ProductCard = ({ product }) => {
     const navigate = useNavigate();
@@ -20,33 +21,20 @@ const ProductCard = ({ product }) => {
         navigate(`/product/${product._id}`);
     };
 
-    // Map category to emoji and badge
-    const getCategoryEmoji = (category) => {
-        const emojiMap = {
-            'Electronics': '📱',
-            'Jewellery & Accessories': '💍',
-            'Handmade & Crafts': '🎨',
-            'Clothing & Fashion': '👗',
-            'Health & Beauty': '🌿',
-        };
-        return emojiMap[category] || '🛍️';
-    };
-
     const vendorName = product.vendorId?.storeInfo?.name || product.vendorId?.name || 'Unknown Vendor';
     const productImage = product.images?.[0] || 'https://via.placeholder.com/400x400?text=No+Image';
-    const badge = product.stock < 5 ? 'LOW STOCK' : 'NEW';
-    const badgeClass = product.stock < 5 ? 'bg-danger text-white' : 'bg-primary text-white';
+    const badge = getStockBadge(product.stock);
 
     return (
         <div onClick={handleCardClick} className="prod-card bg-white rounded-[20px] overflow-hidden group cursor-pointer">
             <div className="h-[200px] flex items-center justify-center text-[80px] relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-200">
-                {productImage.includes('placeholder') ? (
+                {!hasUsableProductImage(productImage) ? (
                     <span>{getCategoryEmoji(product.category)}</span>
                 ) : (
                     <img src={productImage} alt={product.name} className="w-full h-full object-cover" />
                 )}
-                <span className={`absolute top-3.5 left-3.5 font-poppins text-[10px] font-extrabold px-[10px] py-1 rounded-full z-[1] tracking-[0.5px] uppercase ${badgeClass}`}>
-                    {badge}
+                <span className={`absolute top-3.5 left-3.5 font-poppins text-[10px] font-extrabold px-[10px] py-1 rounded-full z-[1] tracking-[0.5px] uppercase ${badge.className}`}>
+                    {badge.label}
                 </span>
                 <button
                     onClick={(e) => { e.stopPropagation(); setIsWishlisted(!isWishlisted); }}

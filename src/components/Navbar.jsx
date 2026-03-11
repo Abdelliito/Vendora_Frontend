@@ -70,7 +70,10 @@ const Navbar = ({ onNavigate }) => {
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Logged in as</p>
                                     <p className="text-sm font-bold text-dark truncate">{user.email}</p>
                                 </div>
-                                <button className="w-full text-left px-4 py-2 text-sm text-dark hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer">
+                                <button
+                                    onClick={() => { navigate('/profile'); setShowUserMenu(false); }}
+                                    className="w-full text-left px-4 py-2 text-sm text-dark hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
+                                >
                                     <UserIcon size={16} className="text-primary" />
                                     My Profile
                                 </button>

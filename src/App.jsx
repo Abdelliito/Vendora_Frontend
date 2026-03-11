@@ -8,6 +8,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import ProductsListPage from './pages/ProductsListPage';
 import VendorDashboard from './pages/VendorDashboard';
 import CheckoutPage from './pages/CheckoutPage';
+import ProfilePage from './pages/ProfilePage';
 import LoadingScreen from './components/LoadingScreen';
 import { AuthProvider } from './context/AuthContext';
 
@@ -50,6 +51,7 @@ const AppContent = () => {
         <Route path="/product/:id" element={<ProductDetailPage />} />
         <Route path="/vendor/dashboard" element={<VendorDashboard />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </>
   );

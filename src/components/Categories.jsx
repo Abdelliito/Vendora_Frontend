@@ -2,7 +2,7 @@ import React from 'react';
 
 const categories = [
     { name: 'Electronics', icon: '📱', color: '#EFF6FF' },
-    { name: 'Fashion', icon: '👗', color: '#FFF7ED' },
+    { name: 'Fashion', icon: '👕', color: '#FFF7ED' },
     { name: 'Food', icon: '🥘', color: '#F0FDF4' },
     { name: 'Jewellery', icon: '💎', color: '#FDF4FF' },
     { name: 'Home Living', icon: '🏠', color: '#FFFBEB' },
