@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import { productService } from '../api/productService';
+import { Link } from 'react-router-dom';
 
 const FeaturedProducts = () => {
     const [products, setProducts] = useState([]);
@@ -47,9 +48,9 @@ const FeaturedProducts = () => {
                 </div>
 
                 <div className="text-center mt-[44px]">
-                    <a href="/products" className="btn-primary bg-accent text-white rounded-xl px-8 py-4 font-poppins font-bold shadow-[0_8px_24px_rgba(249,115,22,0.45)] inline-flex items-center gap-2 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(249,115,22,0.55)] transition-all no-underline">
+                    <Link to="/products" className="btn-primary bg-accent text-white rounded-xl px-8 py-4 font-poppins font-bold shadow-[0_8px_24px_rgba(249,115,22,0.45)] inline-flex items-center gap-2 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(249,115,22,0.55)] transition-all no-underline">
                         View All Products &nbsp;→
-                    </a>
+                    </Link>
                 </div>
             </div>
         </section>
